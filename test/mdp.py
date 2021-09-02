@@ -31,7 +31,7 @@ def main(args):
     env = OneHotAction(GymAtar(env_name))
     obs_shape = env.observation_space.shape
     action_size = env.action_space.shape[0]
-    obs_dtype = bool
+    obs_dtype = int
     action_dtype = np.float32
     batch_size = args.batch_size
     seq_len = args.seq_len
@@ -67,6 +67,7 @@ def main(args):
     for iter in range(1, trainer.config.train_steps):
         if iter % trainer.config.train_every == 0:
             train_metrics = trainer.train_batch(train_metrics)
+            print(iter, train_metrics)
         if iter % trainer.config.slow_target_update == 0:
             trainer.update_target()
         if iter % trainer.config.save_every == 0:
@@ -88,7 +89,7 @@ def main(args):
             train_metrics['train_rewards'] = score
             train_metrics['action_ent'] = np.mean(episode_actor_ent)
             scores.append(score)
-            if len(scores) > 100:
+            if len(scores) > 15:
                 scores.pop(0)
                 current_average = np.mean(scores)
                 if current_average > best_mean_score:

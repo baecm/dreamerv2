@@ -22,93 +22,23 @@ class GymAtar(gym.Env):
         self.observation_space = self.env.observation_space
 
     def reset(self):
-        # self.env.reset()
-        # return self.env.state().transpose(2, 0, 1)
         return self.env.reset()
 
     def step(self, index):
-        '''index is the action id, considering only the set of minimal actions'''
-        # action = self.minimal_actions[index]
-        # r, terminal = self.env.act(action)
-        s_, r, terminal, info = self.env.step(index)
+        s, r, terminal, info = self.env.step(index)
         self.game_over = terminal
-        # return self.env.state().transpose(2, 0, 1), r, terminal, {}
-        return s_, r, terminal, info
+        return s, r, terminal, info
 
     def seed(self, seed='None'):
-        # self.env = minatar.Environment(self.env_name, random_seed=seed)
         self.env = gym.make(self.env_name, seed=seed)
 
     def render(self, mode='human'):
-        if mode == 'rgb_array':
-            return self.env.state()
-        elif mode == 'human':
-            self.env.display_state(self.display_time)
+        return self.env.render()
 
     def close(self):
         if self.env.visualized:
             self.env.close_display()
         return 0
-
-
-# class breakoutPOMDP(gym.ObservationWrapper):
-#     def __init__(self, env):
-#         '''index 2 (trail) is removed, which gives ball's direction'''
-#         super(breakoutPOMDP, self).__init__(env)
-#         c, h, w = env.observation_space.shape
-#         self.observation_space = gym.spaces.MultiBinary((c - 1, h, w))
-#
-#     def observation(self, observation):
-#         return np.stack([observation[0], observation[1], observation[3]], axis=0)
-#
-#
-# class asterixPOMDP(gym.ObservationWrapper):
-#     '''index 2 (trail) is removed, which gives ball's direction'''
-#
-#     def __init__(self, env):
-#         super(asterixPOMDP, self).__init__(env)
-#         c, h, w = env.observation_space.shape
-#         self.observation_space = gym.spaces.MultiBinary((c - 1, h, w))
-#
-#     def observation(self, observation):
-#         return np.stack([observation[0], observation[1], observation[3]], axis=0)
-#
-#
-# class freewayPOMDP(gym.ObservationWrapper):
-#     '''index 2-6 (trail and speed) are removed, which gives cars' speed and direction'''
-#
-#     def __init__(self, env):
-#         super(freewayPOMDP, self).__init__(env)
-#         c, h, w = env.observation_space.shape
-#         self.observation_space = gym.spaces.MultiBinary((c - 5, h, w))
-#
-#     def observation(self, observation):
-#         return np.stack([observation[0], observation[1]], axis=0)
-#
-#
-# class space_invadersPOMDP(gym.ObservationWrapper):
-#     '''index 2-3 (trail) are removed, which gives aliens' direction'''
-#
-#     def __init__(self, env):
-#         super(space_invadersPOMDP, self).__init__(env)
-#         c, h, w = env.observation_space.shape
-#         self.observation_space = gym.spaces.MultiBinary((c - 2, h, w))
-#
-#     def observation(self, observation):
-#         return np.stack([observation[0], observation[1], observation[4], observation[5]], axis=0)
-#
-#
-# class seaquestPOMDP(gym.ObservationWrapper):
-#     '''index 3 (trail) is removed, which gives enemy and driver's direction'''
-#
-#     def __init__(self, env):
-#         super(seaquestPOMDP, self).__init__(env)
-#         c, h, w = env.observation_space.shape
-#         self.observation_space = gym.spaces.MultiBinary((c - 1, h, w))
-#
-#     def observation(self, observation):
-#         return np.stack([observation[0], observation[1], observation[2], observation[4], observation[5], observation[6],
-#                          observation[7], observation[8], observation[9]], axis=0)
 
 
 class ActionRepeat(gym.Wrapper):
@@ -173,7 +103,7 @@ class OneHotAction(gym.Wrapper):
 
 
 class WarpFrame(gym.ObservationWrapper):
-    def __init__(self, env, width=84, height=84, grayscale=True, dict_space_key=None):
+    def __init__(self, env, width=48, height=48, grayscale=True, dict_space_key=None):
         """
         Warp frames to 84x84 as done in the Nature paper and later work.
         If the environment uses dictionary observations, `dict_space_key` can be specified which indicates which

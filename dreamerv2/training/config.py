@@ -24,7 +24,7 @@ class Config():
     train_steps: int = int(5e6)
     train_every: int = 50  # reduce this to potentially improve sample requirements
     collect_intervals: int = 5
-    batch_size: int = 50
+    batch_size: int = 32
     seq_len: int = 50
     eval_episode: int = 4
     eval_render: bool = True
