@@ -36,8 +36,9 @@ class GymAtar(gym.Env):
         return self.env.render()
 
     def close(self):
-        if self.env.visualized:
-            self.env.close_display()
+        # if self.env.visualized:
+        #     self.env.close_display()
+        self.env.close()
         return 0
 
 

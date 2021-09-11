@@ -11,11 +11,12 @@ def main(args):
     print(args)
     env_name = args.env
     if args.pomdp == 1:
-        NotImplementedError
         # exp_id = args.id + '_pomdp'
         # PomdpWrapper = pomdp_wrappers[env_name]
         # env = PomdpWrapper(OneHotAction(GymMinAtar(env_name)))
         print('using partial state info')
+        NotImplementedError
+
     else:
         exp_id = args.id
         env = OneHotAction(GymAtar(env_name))
@@ -66,7 +67,7 @@ def main(args):
 if __name__ == "__main__":
     """there are tonnes of HPs, if you want to do an ablation over any particular one, please add if here"""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--env", type=str, help='mini atari env name')
+    parser.add_argument("--env", default='Pong-v0', type=str, help='mini atari env name')
     parser.add_argument('--eval_episode', type=int, default=10, help='number of episodes to eval')
     parser.add_argument("--id", type=str, default='0', help='Experiment ID')
     parser.add_argument("--eval_render", type=int, help='to render while evaluation')
